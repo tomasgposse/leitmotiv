@@ -26,6 +26,12 @@ Most apps get their illustrations from a stock pack that looks like every other 
 
 ![Dark mode: same accents, light ink, no multiply blending](docs/dark.png)
 
+### Not a style: a language per product
+
+![Cerquita, an app for long-distance couples: a countdown where two mugs get closer as the day approaches and toast on the day, place covers by kind of place, empty states and a share image, all in the thin green line of its icons](docs/cerquita.png)
+
+*The same engine on a different product. Cerquita lives in what travels between two people (mugs, tickets, a suitcase, letters, the flower of its logo), drawn in the line of its own icons, with no texture. Where there is a number that matters, the drawing shows it: the mugs get closer as the meeting approaches. See [`examples/cerquita`](examples/cerquita).*
+
 ## Why it's different
 
 | | Stock packs (unDraw, Blush) | AI image generators | Avatar libraries (DiceBear, Boring Avatars) | **motif** |
@@ -72,6 +78,7 @@ node ../../scripts/export.mjs pantry-art.mjs og '[{"title":"Pantry"}]' --out og.
 | `scripts/specimen.mjs` | Specimen sheet with checks (light or `--dark`) |
 | `scripts/export.mjs` | Any composition to PNG (share images, icons) |
 | `examples/pantry/` | A complete language: `pantry-art.mjs`, `ILLUSTRATION.md`, the before/after page |
+| `examples/cerquita/` | A second language with its own hand and a data-driven countdown |
 | `tests/` | `node --test tests/*.test.mjs` |
 
 ## License
@@ -97,6 +104,10 @@ La mayoría de las apps sacan sus ilustraciones de tres lugares: un pack de stoc
 5. **Lo revisa** con una hoja de muestra: determinismo, variedad, ids que no choquen, peso y contraste. Y después lo que ningún script hace: mirarlo hasta que sea una sola mano.
 6. **Lo conecta a la app**: los avatares reemplazan las iniciales (distintos para cada persona del mismo grupo), los estados vacíos apuntan a la acción, las portadas muestran el contenido de cada colección y las imágenes para compartir se exportan en PNG.
 7. **Deja un `ILLUSTRATION.md`** con el mundo, la gramática, las reglas y cómo sumar un motivo, para que la próxima sesión dibuje con la misma mano.
+
+### No es un estilo: es un lenguaje por producto
+
+El mismo motor en otro producto. Cerquita, una app para parejas a distancia, vive en lo que viaja entre dos personas (tazas, pasajes, una valija, cartas, la flor del logo), dibujado con la línea de sus propios íconos y sin textura. Donde hay un número que importa, el dibujo lo muestra: las tazas se acercan a medida que se acerca el encuentro, y ese día brindan. Está en [`examples/cerquita`](examples/cerquita).
 
 ## Instalación
 

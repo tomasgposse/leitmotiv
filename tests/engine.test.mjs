@@ -3,6 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { canvas, rng, hash, mix, scatter, ellipsePts, roundRectPts, smooth, STYLES } from '../templates/engine.mjs';
 import * as pantry from '../examples/pantry/pantry-art.mjs';
+import * as cerquita from '../examples/cerquita/cerquita-art.mjs';
 
 const palette = { paper: '#ffffff', ink: '#111111', accents: ['#ff0000', '#00aa00'] };
 const draw = (seed, style = 'riso') => {
@@ -79,4 +80,18 @@ test('Pantry: cada producto cae en el objeto correcto', () => {
   assert.equal(pantry.kindOf('Té verde'), 'bag');
   assert.equal(pantry.kindOf('Pan lactal'), 'loaf');
   assert.equal(pantry.kindOf('Pancakes'), 'jar');
+});
+
+test('El texto con una familia entre comillas sigue siendo SVG válido', () => {
+  const c = canvas({ w: 100, h: 50, palette: { paper: '#fff', ink: '#000', accents: ['#f00'], font: 'Georgia, "Times New Roman", serif' } });
+  c.text('Hola', 0, 20);
+  const attrs = c.svg().match(/<text[^>]*>/)[0];
+  assert.match(attrs, /font-family="Georgia, 'Times New Roman', serif"/);
+});
+
+test('Cerquita: el contador acerca las tazas y es determinista', () => {
+  assert.equal(cerquita.countdown(6), cerquita.countdown(6));
+  assert.notEqual(cerquita.countdown(30), cerquita.countdown(6));
+  const two = ['Tomi', 'Cami'];
+  assert.notEqual(cerquita.avatar('Tomi', { among: two }).match(/fill="#[0-9a-f]{6}"/g)[1], cerquita.avatar('Cami', { among: two }).match(/fill="#[0-9a-f]{6}"/g)[1]);
 });

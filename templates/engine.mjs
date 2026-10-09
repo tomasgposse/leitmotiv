@@ -137,9 +137,16 @@ export function canvas({ w, h, size = Math.min(w, h), style = 'riso', palette, s
   const api = {
     r, S, size, w, h, id, palette,
     // Una forma cerrada: color de relleno y contorno de tinta, según el estilo.
-    shape(pts, { fill = palette.accents[0], ink = true, wobbleScale = 1, closed = true, inkScale = 1, dash = null } = {}) {
+    // layer: 'top' dibuja la forma (relleno y contorno) encima de toda la tinta: el centro de una
+    // flor sobre sus pétalos, un sello sobre un sobre.
+    shape(pts, { fill = palette.accents[0], ink = true, wobbleScale = 1, closed = true, inkScale = 1, dash = null, layer = null } = {}) {
       const p = wobble(pts, r, amp * wobbleScale, closed);
       const d = smooth(p, closed);
+      if (layer === 'top') {
+        const iw2 = (S.ink ? inkW : (inkWidth || 0.02 * size)) * inkScale;
+        tops.push(`<path d="${d}" fill="${fill || 'none'}"${ink && S.ink > 0 ? ` stroke="${palette.ink}" stroke-width="${fmt(iw2)}" stroke-linejoin="round"` : ''}/>`);
+        return api;
+      }
       if (S.fill && fill && closed) {
         fills.push(`<path d="${d}" fill="${fill}"/>`);
         if (S.shadow) shadows.push(`<path d="${d}" fill="${palette.ink}" opacity=".9" transform="translate(${fmt(S.shadow * size)} ${fmt(S.shadow * size)})"/>`);
@@ -150,6 +157,11 @@ export function canvas({ w, h, size = Math.min(w, h), style = 'riso', palette, s
       if (ink && (S.ink > 0 || dash)) {
         inks.push(`<path d="${d}" fill="none" stroke="${palette.ink}" stroke-width="${fmt(iw)}" stroke-linecap="round" stroke-linejoin="round"${dash ? ` stroke-dasharray="${dash.map((v) => fmt(v * size)).join(' ')}"` : ''}/>`);
       }
+      return api;
+    },
+    // Un rectángulo exacto, sin temblor (marcos, tarjetas, el fondo de una placa).
+    rect(x, y, rw, rh, { fill = palette.paper, rx = 0 } = {}) {
+      fills.push(`<rect x="${fmt(x)}" y="${fmt(y)}" width="${fmt(rw)}" height="${fmt(rh)}" rx="${fmt(rx)}" fill="${fill}"/>`);
       return api;
     },
     // Agrupa lo que dibuje fn bajo una transformación (rotar un objeto caído, espejar).
@@ -180,7 +192,7 @@ export function canvas({ w, h, size = Math.min(w, h), style = 'riso', palette, s
     },
     // Texto (solo para placas como imágenes OG): fuera de la ilustración, sin efectos.
     text(str, x, y, { size: fs = 40, weight = 700, color = palette.ink, family = palette.font || 'system-ui, sans-serif', anchor = 'start' } = {}) {
-      tops.push(`<text x="${fmt(x)}" y="${fmt(y)}" font-family="${family}" font-size="${fmt(fs)}" font-weight="${weight}" fill="${color}" text-anchor="${anchor}">${String(str).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]))}</text>`);
+      tops.push(`<text x="${fmt(x)}" y="${fmt(y)}" font-family="${String(family).replace(/"/g, "'")}" font-size="${fmt(fs)}" font-weight="${weight}" fill="${color}" text-anchor="${anchor}">${String(str).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]))}</text>`);
       return api;
     },
     // Termina el dibujo y devuelve el SVG. bg: color de fondo o null para transparente.
