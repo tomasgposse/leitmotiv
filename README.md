@@ -46,17 +46,19 @@ A *leitmotiv* is the motif that keeps coming back and tells you where you are. T
 
 ## Install
 
+leitmotiv is an agent skill. Install it with:
+
 ```bash
-git clone https://github.com/tomasgposse/leitmotiv ~/.claude/skills/leitmotiv
+npx skills add tomasgposse/leitmotiv
 ```
 
-Or copy the folder into your project's `.claude/skills/`. Then ask things like:
+Or clone it into your skills folder (for Claude Code, `~/.claude/skills/leitmotiv`). Then ask things like:
 
 > "Our empty states are just text, give the app some illustrations"
 > "Replace the initials avatars with something that feels like us"
 > "We need OG images and covers for each project"
 
-**Requirements:** Node 22+. Chrome or Edge for the specimen screenshots and PNG export (`LEITMOTIV_BROWSER` if it's somewhere unusual). The generated code has no dependencies and runs in the browser, in Node and on the server.
+**Requirements:** Node 22+. Chrome or Edge for the specimen screenshots and PNG export (`LEITMOTIV_BROWSER` if it's somewhere unusual). The generated code has no dependencies and runs in the browser, in Node and on the server. Tested on Windows.
 
 ## Run the example
 
@@ -115,17 +117,19 @@ El mismo motor en otro producto. Cerquita, una app para parejas a distancia, viv
 
 ## Instalación
 
+leitmotiv es una skill para agentes. Instalala con:
+
 ```bash
-git clone https://github.com/tomasgposse/leitmotiv ~/.claude/skills/leitmotiv
+npx skills add tomasgposse/leitmotiv
 ```
 
-O copiá la carpeta en `.claude/skills/` de tu proyecto. Después pedile cosas como:
+O cloná el repo en tu carpeta de skills (para Claude Code, `~/.claude/skills/leitmotiv`). Después pedile cosas como:
 
 > "Los estados vacíos son solo texto, dale ilustraciones a la app"
 > "Reemplazá los avatares con iniciales por algo que se sienta nuestro"
 > "Necesitamos imágenes OG y portadas para cada proyecto"
 
-**Requisitos:** Node 22+. Chrome o Edge para las capturas de la hoja de muestra y la exportación a PNG. El código que genera no tiene dependencias y corre en el navegador, en Node y en el servidor.
+**Requisitos:** Node 22+. Chrome o Edge para las capturas de la hoja de muestra y la exportación a PNG. El código que genera no tiene dependencias y corre en el navegador, en Node y en el servidor. Probado en Windows.
 
 ## Probar el ejemplo
 
