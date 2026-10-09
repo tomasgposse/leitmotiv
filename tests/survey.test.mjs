@@ -11,8 +11,8 @@ const app = path.join(here, 'fixtures', 'app');
 
 test('survey encuentra la marca y los lugares que piden ilustración', () => {
   execFileSync('node', [path.join(here, '..', 'scripts', 'survey.mjs'), app], { stdio: 'pipe' });
-  const s = JSON.parse(fs.readFileSync(path.join(app, '.motif', 'survey.json'), 'utf8'));
-  fs.rmSync(path.join(app, '.motif'), { recursive: true, force: true });
+  const s = JSON.parse(fs.readFileSync(path.join(app, '.leitmotiv', 'survey.json'), 'utf8'));
+  fs.rmSync(path.join(app, '.leitmotiv'), { recursive: true, force: true });
   assert.equal(s.brand.colors.ink, '#2b4636');
   assert.ok(s.brand.fonts.some((f) => f.includes('Switzer')));
   assert.ok(s.images.brand.includes('public/logo.svg'));

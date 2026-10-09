@@ -4,13 +4,13 @@
 // (estados vacíos, avatares con iniciales, 404, onboarding, imagen para compartir, relleno).
 //
 // Uso: node survey.mjs <proyecto>
-// Imprime un resumen y escribe <proyecto>/.motif/survey.json.
+// Imprime un resumen y escribe <proyecto>/.leitmotiv/survey.json.
 
 import fs from 'node:fs';
 import path from 'node:path';
 
 const root = path.resolve(process.argv[2] || '.');
-const SKIP = new Set(['node_modules', '.git', '.next', 'dist', 'build', 'out', '.motif', '.vercel', 'coverage', '.turbo', '.cache']);
+const SKIP = new Set(['node_modules', '.git', '.next', 'dist', 'build', 'out', '.leitmotiv', '.vercel', 'coverage', '.turbo', '.cache']);
 const CODE = /\.(jsx?|tsx?|vue|svelte|astro|html|mdx?)$/;
 const STYLE = /\.(css|scss|sass|less)$/;
 const IMG = /\.(svg|png|jpe?g|webp|gif|avif)$/i;
@@ -82,8 +82,8 @@ const survey = {
   images: { total: images.length, brand: brandAssets.slice(0, 20), sample: images.slice(0, 20) },
   slots,
 };
-fs.mkdirSync(path.join(root, '.motif'), { recursive: true });
-fs.writeFileSync(path.join(root, '.motif', 'survey.json'), JSON.stringify(survey, null, 2));
+fs.mkdirSync(path.join(root, '.leitmotiv'), { recursive: true });
+fs.writeFileSync(path.join(root, '.leitmotiv', 'survey.json'), JSON.stringify(survey, null, 2));
 
 console.log(`\nmotif · ${path.basename(root)}${stack.length ? ' · ' + stack.join(', ') : ''}\n`);
 console.log(`Colores (${colors.size}): ${[...colors].slice(0, 12).map(([k, v]) => `${k} ${v}`).join(' · ') || '—'}`);
@@ -96,4 +96,4 @@ for (const [k, list] of Object.entries(slots)) {
   console.log(`  ${list.length ? '●' : '○'} ${NAMES[k]}${list.length ? `: ${list.length}` : ''}`);
   for (const s of list.slice(0, 3)) console.log(`      ${s.file}:${s.line}  ${s.text}`);
 }
-console.log(`\n${path.relative(process.cwd(), path.join(root, '.motif', 'survey.json'))}`);
+console.log(`\n${path.relative(process.cwd(), path.join(root, '.leitmotiv', 'survey.json'))}`);

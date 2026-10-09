@@ -11,7 +11,7 @@ const INK = palette.ink;
 const days = [30, 14, 6, 1, 0];
 const places = ['Café Martínez', 'Parque Sarmiento', 'Cine Gaumont', 'Parrilla Don Julio'];
 
-const html = `<!doctype html><html lang="es"><meta charset="utf-8"><title>Cerquita · motif</title>
+const html = `<!doctype html><html lang="es"><meta charset="utf-8"><title>Cerquita · leitmotiv</title>
 <style>
   body { margin: 0; background: ${palette.paper}; color: ${INK}; font: 15px/1.45 system-ui, sans-serif; }
   main { max-width: 1180px; margin: 0 auto; padding: 48px 40px 56px; }

@@ -1,14 +1,16 @@
-# motif
+# leitmotiv
 
 **English** · [Español](#español)
 
 Most apps get their illustrations from a stock pack that looks like every other app, from AI image generators that look like every other AI app, or from nothing: initials in circles, a grey placeholder, a screen that says "No items".
 
-**motif gives a product its own illustration language, written as code.** It reads the project, finds the world the product lives in, proposes three illustration languages drawn from that world, and builds the one you choose as a small generator inside your project. From then on every image the product needs (each list item, each person, each empty state, each cover, each share image) is drawn by that code from a seed, in the same hand, forever consistent.
+**leitmotiv gives a product its own illustration language, written as code.** It reads the project, finds the world the product lives in, proposes three illustration languages drawn from that world, and builds the one you choose as a small generator inside your project. From then on every image the product needs (each list item, each person, each empty state, each cover, each share image) is drawn by that code from a seed, in the same hand, forever consistent.
 
-![Pantry before (initials, no images) and after motif: product glyphs, a different fruit for each housemate, an empty-state shelf with a dashed slot pointing to the action, and a cover for each week of history](docs/pantry.png)
+A *leitmotiv* is the motif that keeps coming back and tells you where you are. That is the job here: the same world and the same hand, everywhere the product shows an image.
 
-*Pantry is the fictional grocery list from [designdiff](https://github.com/tomasgposse/designdiff)'s example. On the left, its last version; on the right, the same app with its motif language. Everything lives in [`examples/pantry`](examples/pantry).*
+![Pantry before (initials, no images) and after leitmotiv: product glyphs, a different fruit for each housemate, an empty-state shelf with a dashed slot pointing to the action, and a cover for each week of history](docs/pantry.png)
+
+*Pantry is the fictional grocery list from [designdiff](https://github.com/tomasgposse/designdiff)'s example. On the left, its last version; on the right, the same app with its own language. Everything lives in [`examples/pantry`](examples/pantry).*
 
 ## What it does
 
@@ -34,7 +36,7 @@ Most apps get their illustrations from a stock pack that looks like every other 
 
 ## Why it's different
 
-| | Stock packs (unDraw, Blush) | AI image generators | Avatar libraries (DiceBear, Boring Avatars) | **motif** |
+| | Stock packs (unDraw, Blush) | AI image generators | Avatar libraries (DiceBear, Boring Avatars) | **leitmotiv** |
 |---|---|---|---|---|
 | Comes from your product's world | No | Only if you prompt well each time | No | **Yes: it's the first step** |
 | Uses your exact tokens | Recolor by hand | No | Palette only | **Yes** |
@@ -45,7 +47,7 @@ Most apps get their illustrations from a stock pack that looks like every other 
 ## Install
 
 ```bash
-git clone https://github.com/tomasgposse/motif ~/.claude/skills/motif
+git clone https://github.com/tomasgposse/leitmotiv ~/.claude/skills/leitmotiv
 ```
 
 Or copy the folder into your project's `.claude/skills/`. Then ask things like:
@@ -54,7 +56,7 @@ Or copy the folder into your project's `.claude/skills/`. Then ask things like:
 > "Replace the initials avatars with something that feels like us"
 > "We need OG images and covers for each project"
 
-**Requirements:** Node 22+. Chrome or Edge for the specimen screenshots and PNG export (`MOTIF_BROWSER` if it's somewhere unusual). The generated code has no dependencies and runs in the browser, in Node and on the server.
+**Requirements:** Node 22+. Chrome or Edge for the specimen screenshots and PNG export (`LEITMOTIV_BROWSER` if it's somewhere unusual). The generated code has no dependencies and runs in the browser, in Node and on the server.
 
 ## Run the example
 
@@ -91,9 +93,11 @@ MIT
 
 La mayoría de las apps sacan sus ilustraciones de tres lugares: un pack de stock que se parece a todas las apps, un generador de imágenes con IA que se parece a todas las apps hechas con IA, o de ningún lado (iniciales en círculos, un gris de relleno, una pantalla que dice "No hay elementos").
 
-**motif le da a un producto su propio lenguaje de ilustración, escrito como código.** Lee el proyecto, encuentra el mundo en el que vive el producto, propone tres lenguajes de ilustración sacados de ese mundo y construye el que elijas como un generador chico dentro del proyecto. A partir de ahí, cada imagen que el producto necesita (cada producto de una lista, cada persona, cada estado vacío, cada portada, cada imagen para compartir) la dibuja ese código a partir de una semilla, con la misma mano, siempre igual.
+**leitmotiv le da a un producto su propio lenguaje de ilustración, escrito como código.** Lee el proyecto, encuentra el mundo en el que vive el producto, propone tres lenguajes de ilustración sacados de ese mundo y construye el que elijas como un generador chico dentro del proyecto. A partir de ahí, cada imagen que el producto necesita (cada producto de una lista, cada persona, cada estado vacío, cada portada, cada imagen para compartir) la dibuja ese código a partir de una semilla, con la misma mano, siempre igual.
 
-*Pantry es la lista de compras ficticia del ejemplo de [designdiff](https://github.com/tomasgposse/designdiff). A la izquierda, su última versión; a la derecha, la misma app con su lenguaje de motif. Todo está en [`examples/pantry`](examples/pantry).*
+Un *leitmotiv* es el motivo que vuelve y te dice dónde estás. Eso hace la skill: el mismo mundo y la misma mano en cada lugar donde el producto muestra una imagen.
+
+*Pantry es la lista de compras ficticia del ejemplo de [designdiff](https://github.com/tomasgposse/designdiff). A la izquierda, su última versión; a la derecha, la misma app con su propio lenguaje. Todo está en [`examples/pantry`](examples/pantry).*
 
 ## Qué hace
 
@@ -112,7 +116,7 @@ El mismo motor en otro producto. Cerquita, una app para parejas a distancia, viv
 ## Instalación
 
 ```bash
-git clone https://github.com/tomasgposse/motif ~/.claude/skills/motif
+git clone https://github.com/tomasgposse/leitmotiv ~/.claude/skills/leitmotiv
 ```
 
 O copiá la carpeta en `.claude/skills/` de tu proyecto. Después pedile cosas como:

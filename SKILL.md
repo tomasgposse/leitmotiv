@@ -1,11 +1,11 @@
 ---
-name: motif
+name: leitmotiv
 description: Art-directs and builds a product's own illustration language as code. Reads the whole project (what the product is about, its brand tokens, copy and assets), finds the places that need images (empty states, avatars, 404, onboarding, success, covers, share images, placeholders), proposes three illustration languages drawn from the product's own world, lets the person choose, then builds a dependency-free generator inside the project that draws every one of those images from a seed (a name, an id), so each list, person or item gets its own consistent illustration with no stock and no AI-generated look. Verifies it with a specimen sheet and in the real app. Use when someone wants illustrations, empty states, avatars, OG images or covers for their app, says the product feels generic or lifeless, uses initials or placeholder images, or asks for a visual identity beyond logo and colors.
 ---
 
-# motif
+# leitmotiv
 
-Most products get their illustrations from three places: a stock pack that looks like every other app, AI image generators that look like every other AI app, or nothing (initials in circles, a grey placeholder, an empty screen that says "No items"). motif does what an illustrator and an art director would do together: find the **world** the product belongs to, design an illustration **language** from it, and write that language as **code** inside the project. From then on every image the product needs is drawn by that code, from a seed, in the same hand.
+Most products get their illustrations from three places: a stock pack that looks like every other app, AI image generators that look like every other AI app, or nothing (initials in circles, a grey placeholder, an empty screen that says "No items"). leitmotiv does what an illustrator and an art director would do together: find the **world** the product belongs to, design an illustration **language** from it, and write that language as **code** inside the project. From then on every image the product needs is drawn by that code, from a seed, in the same hand.
 
 The person is the art director. You propose, they choose, you build. Talk to them in their language; write code comments in the project's existing style.
 
@@ -20,7 +20,7 @@ The person is the art director. You propose, they choose, you build. Talk to the
 7. **Wire** it into the app's slots.
 8. **Verify** in the real app and **hand back** with evidence and `ILLUSTRATION.md`.
 
-`<skill>` is the folder this file lives in. Scripts need Node 22+ and Chrome or Edge for screenshots (or a path in `MOTIF_BROWSER`). No npm install.
+`<skill>` is the folder this file lives in. Scripts need Node 22+ and Chrome or Edge for screenshots (or a path in `LEITMOTIV_BROWSER`). No npm install.
 
 ### 1. Survey
 
@@ -28,7 +28,7 @@ The person is the art director. You propose, they choose, you build. Talk to the
 node <skill>/scripts/survey.mjs <project>
 ```
 
-Prints and writes `<project>/.motif/survey.json` (add `.motif/` to `.gitignore`): brand colors, fonts and radii, existing images and brand assets, docs, and the **slots**: every place in the code that asks for an image today (empty-state copy, initials avatars, not-found pages, onboarding, error and success states, OG metadata, placeholder services like picsum or unsplash).
+Prints and writes `<project>/.leitmotiv/survey.json` (add `.leitmotiv/` to `.gitignore`): brand colors, fonts and radii, existing images and brand assets, docs, and the **slots**: every place in the code that asks for an image today (empty-state copy, initials avatars, not-found pages, onboarding, error and success states, OG metadata, placeholder services like picsum or unsplash).
 
 ### 2. Read
 
@@ -60,7 +60,7 @@ Wait. Adjust what they ask for. A name, a motif or a color can change here cheap
 
 ### 5. Build
 
-1. Copy `<skill>/templates/engine.mjs` into the project (for example `src/lib/motif/engine.mjs`). Don't edit it: the product's language goes in its own file.
+1. Copy `<skill>/templates/engine.mjs` into the project (for example `src/lib/leitmotiv/engine.mjs`). Don't edit it: the product's language goes in its own file.
 2. Write `<product>-art.mjs` next to it, like [`examples/pantry/pantry-art.mjs`](examples/pantry/pantry-art.mjs):
    - **The palette** from the project's tokens, by role: `paper`, `ink`, `accents`. Same hex values as the UI, never "close enough" ones.
    - **The motifs**: one function per thing in the world, drawing inside a box `{x, y, w, h}` with `c.shape`, `c.stroke` and `c.dot`. Vary details with the seeded `r`, never with `Math.random()`.
@@ -71,7 +71,7 @@ Wait. Adjust what they ask for. A name, a motif or a color can change here cheap
 ### 6. Check
 
 ```bash
-node <skill>/scripts/specimen.mjs <project>/src/lib/motif/<product>-art.mjs --out <project>/.motif
+node <skill>/scripts/specimen.mjs <project>/src/lib/leitmotiv/<product>-art.mjs --out <project>/.leitmotiv
 ```
 
 It renders everything, screenshots it, and checks that the same seed gives the same drawing, different seeds give different drawings, ids don't clash on a page, each SVG stays under 40 KB, and ink has enough contrast against paper. **Open the PNG and look at it like an art director**, not like a test runner:

@@ -1,4 +1,4 @@
-// motif · motor de ilustración generativa.
+// leitmotiv · motor de ilustración generativa.
 // Sin dependencias: funciona en el navegador, en Node y en el servidor (SSR, imágenes OG).
 // Se copia al proyecto y no se edita: el lenguaje propio del producto vive en otro archivo
 // que importa estas piezas (ver el ejemplo en examples/pantry/pantry-art.mjs).

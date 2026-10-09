@@ -2,7 +2,7 @@
 // Hoja de muestra de un lenguaje de ilustración: renderiza todo lo que exporta specimen() del
 // generador, en uno o varios estilos, lo captura y revisa que el sistema se porte bien.
 //
-// Uso: node specimen.mjs <generador.mjs> [--styles riso,line,blocks] [--out .motif] [--dark]
+// Uso: node specimen.mjs <generador.mjs> [--styles riso,line,blocks] [--out .leitmotiv] [--dark]
 // --dark pide specimen(style, { dark: true }) y muestra la hoja sobre fondo oscuro.
 // Escribe <out>/specimen.html, <out>/specimen.png y <out>/checks.json.
 
@@ -14,9 +14,9 @@ import { open } from './lib/browser.mjs';
 const args = process.argv.slice(2);
 const opt = (k, d) => (args.includes(k) ? args[args.indexOf(k) + 1] : d);
 const file = args.find((a) => a.endsWith('.mjs') || a.endsWith('.js'));
-if (!file) { console.error('Uso: node specimen.mjs <generador.mjs> [--styles riso,line,blocks] [--out .motif] [--dark]'); process.exit(1); }
+if (!file) { console.error('Uso: node specimen.mjs <generador.mjs> [--styles riso,line,blocks] [--out .leitmotiv] [--dark]'); process.exit(1); }
 const styles = opt('--styles', 'riso').split(',');
-const out = path.resolve(opt('--out', '.motif'));
+const out = path.resolve(opt('--out', '.leitmotiv'));
 fs.mkdirSync(out, { recursive: true });
 
 const art = await import(pathToFileURL(path.resolve(file)).href);
@@ -67,7 +67,7 @@ if (art.palette?.ink && art.palette?.paper) {
 // --- La página ---
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const html = `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>motif · hoja de muestra</title>
+<title>leitmotiv · hoja de muestra</title>
 <style>
   :root { color-scheme: light; --bg: #fbfaf7; --ink: #1d1d1b; --ink2: #66645e; --line: #e7e3da; }
   @media (prefers-color-scheme: dark) { :root { color-scheme: dark; --bg: #1b1b1a; --ink: #f4f2ec; --ink2: #b4b1a8; --line: #34332f; } }

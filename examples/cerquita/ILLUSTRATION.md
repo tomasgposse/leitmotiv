@@ -1,6 +1,6 @@
 # Cerquita · lenguaje de ilustración
 
-> El documento que motif deja en el proyecto. Si vas a agregar o cambiar una ilustración, leelo primero.
+> El documento que leitmotiv deja en el proyecto. Si vas a agregar o cambiar una ilustración, leelo primero.
 
 ## El mundo
 

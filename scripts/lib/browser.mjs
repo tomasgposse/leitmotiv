@@ -7,7 +7,7 @@ import path from 'node:path';
 import { spawn } from 'node:child_process';
 
 const CANDIDATES = [
-  process.env.MOTIF_BROWSER,
+  process.env.LEITMOTIV_BROWSER,
   'C:/Program Files/Google/Chrome/Application/chrome.exe',
   'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',
   '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
@@ -19,12 +19,12 @@ export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 function findBrowser() {
   const p = CANDIDATES.find((c) => fs.existsSync(c));
-  if (!p) throw new Error('No encontré Chrome ni Edge. Indicá la ruta con MOTIF_BROWSER.');
+  if (!p) throw new Error('No encontré Chrome ni Edge. Indicá la ruta con LEITMOTIV_BROWSER.');
   return p;
 }
 
 export async function open({ width = 1280, height = 900, scale = 2, dark = false } = {}) {
-  const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'motif-'));
+  const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'leitmotiv-'));
   const proc = spawn(findBrowser(), [
     '--headless=new', '--hide-scrollbars', '--no-first-run', '--no-default-browser-check',
     '--disable-background-networking', '--disable-component-update',

@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 test('SKILL.md: nombre y descripción cargables', () => {
   const skill = fs.readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'SKILL.md'), 'utf8');
   const fm = skill.split('---')[1];
-  assert.equal(fm.match(/^name: (.+)$/m)?.[1], 'motif');
+  assert.equal(fm.match(/^name: (.+)$/m)?.[1], 'leitmotiv');
   const desc = fm.match(/^description: (.+)$/m)?.[1];
   assert.ok(desc && desc.length <= 1024, `descripción de ${desc?.length} caracteres`);
   assert.ok(!/: /.test(desc) && !/ #/.test(desc), 'la descripción no puede tener ": " ni " #"');

@@ -25,7 +25,7 @@ const m = svg.match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/);
 const [w, h] = m ? [Math.round(+m[1]), Math.round(+m[2])] : [1200, 630];
 const scale = Number(opt('--scale', 1));
 
-const tmp = path.join(path.dirname(path.resolve(outFile)), `.motif-export-${process.pid}.html`);
+const tmp = path.join(path.dirname(path.resolve(outFile)), `.leitmotiv-export-${process.pid}.html`);
 fs.mkdirSync(path.dirname(tmp), { recursive: true });
 fs.writeFileSync(tmp, `<!doctype html><meta charset="utf-8"><style>html,body{margin:0;background:transparent}svg{display:block;width:${w}px;height:${h}px}</style>${svg}`);
 const page = await open({ width: w, height: h, scale });
