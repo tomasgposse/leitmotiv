@@ -1,0 +1,3 @@
+:root { --paper: #f5f0e6; --ink: #2b4636; --accent: #e8603c; --radius: 14px; }
+body { font-family: "Switzer", system-ui, sans-serif; background: var(--paper); }
+.card { border-radius: 14px; }

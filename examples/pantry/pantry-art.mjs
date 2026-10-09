@@ -12,8 +12,14 @@ export const palette = {
   accents: ['#e8603c', '#eab246', '#7fb2dc', '#62b49f', '#f0a59a', '#e3cfa8'],
   font: '"Segoe UI", system-ui, sans-serif',
 };
+// En modo oscuro cambian el papel y la tinta; los colores de la alacena quedan.
+export const paletteDark = { ...palette, paper: '#1f2620', ink: '#efe7d6', dark: true };
+const pal = (dark) => (dark ? paletteDark : palette);
 const [TOMATO, MUSTARD, SKY, MINT, BLUSH, OAT] = palette.accents;
+// Las etiquetas de los frascos son de papel en los dos modos, y lo que se escribe en ellas
+// va siempre en tinta oscura.
 const PAPER = palette.paper;
+const LABEL = { width: 0.7, color: palette.ink };
 
 // --- Los objetos de Pantry: cada uno se dibuja dentro de una caja b = {x, y, w, h} ---
 
@@ -23,8 +29,8 @@ function jar(c, b, r) {
   c.shape(roundRectPts(x + w * 0.1, y + h * 0.2, w * 0.8, h * 0.8, w * 0.2), { fill });
   c.shape(roundRectPts(x + w * 0.16, y + h * 0.04, w * 0.68, h * 0.18, w * 0.06), { fill: r.pick([SKY, OAT, TOMATO]) });
   c.shape(roundRectPts(x + w * 0.22, y + h * 0.46, w * 0.56, h * 0.3, w * 0.05), { fill: PAPER });
-  c.stroke([[x + w * 0.32, y + h * 0.57], [x + w * 0.68, y + h * 0.57]], { width: 0.7 });
-  c.stroke([[x + w * 0.32, y + h * 0.66], [x + w * 0.56, y + h * 0.66]], { width: 0.7 });
+  c.stroke([[x + w * 0.32, y + h * 0.57], [x + w * 0.68, y + h * 0.57]], LABEL);
+  c.stroke([[x + w * 0.32, y + h * 0.66], [x + w * 0.56, y + h * 0.66]], LABEL);
 }
 
 function carton(c, b, r) {
@@ -93,7 +99,7 @@ function bag(c, b, r) {
   // Un grano de café en la etiqueta.
   const bx = x + w * 0.5, by = y + h * 0.6;
   c.shape(ellipsePts(bx, by, w * 0.15, w * 0.2, 18, 0.4), { fill: PAPER });
-  c.stroke([[bx - w * 0.05, by - h * 0.12], [bx + w * 0.02, by], [bx - w * 0.03, by + h * 0.12]], { width: 0.8 });
+  c.stroke([[bx - w * 0.05, by - h * 0.12], [bx + w * 0.02, by], [bx - w * 0.03, by + h * 0.12]], { ...LABEL, width: 0.8 });
 }
 
 function can(c, b, r) {
@@ -121,26 +127,28 @@ function shelf(c, x, y, w) {
 
 const MOTIFS = { jar, carton, bottle, banana, fruit, loaf, bag, can };
 
-// Qué objeto es cada producto de la lista. Palabras en castellano e inglés.
+// Qué objeto es cada producto de la lista. Palabras en castellano e inglés, sin tildes
+// (el nombre se compara sin tildes, así "Café" y "cafe" son lo mismo).
 const KINDS = [
-  [/leche|milk|oat|yogur|yogurt|crema|cream/, 'carton'],
-  [/banana|platano|plátano/, 'banana'],
-  [/manzana|apple|naranja|orange|tomate|tomato|limon|limón|lemon|fruta|fruit|palta|avocado|durazno|peach/, 'fruit'],
-  [/pan\b|bread|baguette|medialuna|croissant|galleta|cookie/, 'loaf'],
-  [/cafe|café|coffee|te\b|tea|yerba/, 'bag'],
-  [/jabon|jabón|soap|detergente|detergent|lavandina|bleach|shampoo|dish/, 'bottle'],
-  [/atun|atún|tuna|lata|can\b|tomato sauce|puré|pure|garbanzo|chickpea/, 'can'],
+  [/leche|milk|\boat\b|yogur|yogurt|crema|cream/, 'carton'],
+  [/banana|platano/, 'banana'],
+  // Antes que las frutas: "puré de tomate" es una lata, no un tomate.
+  [/atun|tuna|\blata\b|\bcan\b|tomato sauce|\bpure\b|garbanzo|chickpea/, 'can'],
+  [/manzana|apple|naranja|orange|tomate|tomato|limon|lemon|fruta|fruit|palta|avocado|durazno|peach/, 'fruit'],
+  [/\bpan\b|bread|baguette|medialuna|croissant|galleta|cookie/, 'loaf'],
+  [/cafe|coffee|\bte\b|\btea\b|yerba/, 'bag'],
+  [/jabon|soap|detergente|detergent|lavandina|bleach|shampoo|\bdish/, 'bottle'],
 ];
 export function kindOf(name) {
-  const n = String(name).toLowerCase();
+  const n = String(name).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   return (KINDS.find(([re]) => re.test(n)) || [null, 'jar'])[1];
 }
 
 // --- Composiciones: una por cada lugar de la app que necesita imagen ---
 
 // El ícono de un producto de la lista. 48 px en la lista, se ve bien de 24 a 160.
-export function itemGlyph(name, { size = 48, style = 'riso', bg = null } = {}) {
-  const c = canvas({ w: 100, h: 100, size: 100, style, palette, seed: `item:${name}`, inkWidth: 2.6, grainScale: size });
+export function itemGlyph(name, { size = 48, style = 'riso', bg = null, dark = false } = {}) {
+  const c = canvas({ w: 100, h: 100, size: 100, style, palette: pal(dark), seed: `item:${name}`, inkWidth: 2.6, grainScale: size });
   const kind = kindOf(name);
   const box = kind === 'banana' ? { x: 4, y: 18, w: 92, h: 66 } : kind === 'fruit' ? { x: 12, y: 8, w: 76, h: 84 } : kind === 'loaf' ? { x: 6, y: 26, w: 88, h: 60 } : { x: 18, y: 8, w: 64, h: 86 };
   MOTIFS[kind](c, box, c.r);
@@ -152,7 +160,7 @@ export function itemGlyph(name, { size = 48, style = 'riso', bg = null } = {}) {
 // cada persona recibe un color y una fruta distintos. Sin among, salen del nombre.
 const PEOPLE_COLORS = [TOMATO, SKY, MINT, MUSTARD, BLUSH];
 const FRUITS = ['round', 'pear', 'lemon'];
-export function avatar(name, { size = 40, style = 'riso', among = null } = {}) {
+export function avatar(name, { size = 40, style = 'riso', among = null, dark = false } = {}) {
   const r = rng(`person:${name}`);
   let slot = null;
   if (among && among.includes(name)) {
@@ -162,8 +170,8 @@ export function avatar(name, { size = 40, style = 'riso', among = null } = {}) {
   }
   // El color de la persona es la fruta; el fondo es ese mismo color, muy claro.
   const body = slot === null ? r.pick(PEOPLE_COLORS) : PEOPLE_COLORS[slot % PEOPLE_COLORS.length];
-  const bg = mix(body, PAPER, 0.72);
-  const c = canvas({ w: 100, h: 100, size: 100, style, palette, seed: `person:${name}`, inkWidth: 2.6, grainScale: size });
+  const bg = mix(body, pal(dark).paper, dark ? 0.55 : 0.72);
+  const c = canvas({ w: 100, h: 100, size: 100, style, palette: pal(dark), seed: `person:${name}`, inkWidth: 2.6, grainScale: size });
   const cx = 50, cy = 58, rad = 30;
   const kind = slot === null ? r.pick(FRUITS) : FRUITS[(slot + Math.floor(slot / PEOPLE_COLORS.length)) % FRUITS.length];
   let pts;
@@ -184,8 +192,8 @@ export function avatar(name, { size = 40, style = 'riso', among = null } = {}) {
 
 // Estado vacío. mood "empty": la lista recién creada (un estante con un hueco punteado que
 // invita a agregar). mood "done": todo comprado (el estante lleno).
-export function emptyState({ seed = 'pantry', mood = 'empty', style = 'riso', w = 320, h = 200 } = {}) {
-  const c = canvas({ w, h, size: 200, style, palette, seed: `empty:${seed}:${mood}`, inkWidth: 2.2, grainScale: w, wobbleScale: 0.55 });
+export function emptyState({ seed = 'pantry', mood = 'empty', style = 'riso', w = 320, h = 200, dark = false } = {}) {
+  const c = canvas({ w, h, size: 200, style, palette: pal(dark), seed: `empty:${seed}:${mood}`, inkWidth: 2.2, grainScale: w, wobbleScale: 0.55 });
   const r = c.r;
   const base = h * 0.78;
   shelf(c, w * 0.08, base, w * 0.84);
@@ -209,10 +217,10 @@ export function emptyState({ seed = 'pantry', mood = 'empty', style = 'riso', w 
 }
 
 // Portada de una lista o de una semana del historial: los productos de esa lista, desparramados.
-export function cover(title, { items = [], style = 'riso', w = 600, h = 240 } = {}) {
-  const c = canvas({ w, h, size: 240, style, palette, seed: `cover:${title}`, inkWidth: 2.6, grainScale: w, wobbleScale: 0.7 });
+export function cover(title, { items = [], style = 'riso', w = 600, h = 240, dark = false } = {}) {
+  const c = canvas({ w, h, size: 240, style, palette: pal(dark), seed: `cover:${title}`, inkWidth: 2.6, grainScale: w, wobbleScale: 0.7 });
   const r = c.r;
-  c.shape(ellipsePts(w * r.float(0.35, 0.65), h * 0.55, w * 0.34, h * 0.48, 30, r.float(-0.2, 0.2)), { fill: mix(OAT, PAPER, 0.45), ink: false, wobbleScale: 3 });
+  c.shape(ellipsePts(w * r.float(0.35, 0.65), h * 0.55, w * 0.34, h * 0.48, 30, r.float(-0.2, 0.2)), { fill: mix(OAT, pal(dark).paper, dark ? 0.75 : 0.45), ink: false, wobbleScale: 3 });
   const names = items.length ? items : r.shuffle(['milk', 'banana', 'bread', 'coffee', 'soap', 'tomato', 'rice', 'tuna']).slice(0, 7);
   const boxes = scatter(r, names.length, { x: w * 0.04, y: h * 0.06, w: w * 0.92, h: h * 0.88, min: h * 0.32, max: h * 0.44, pad: 4, tries: 1500 });
   boxes.forEach((b, i) => {
@@ -222,7 +230,7 @@ export function cover(title, { items = [], style = 'riso', w = 600, h = 240 } = 
       MOTIFS[kind](c, kind === 'banana' || kind === 'loaf' ? { x: b.x, y: b.y + b.h * 0.25, w: b.w, h: b.h * 0.7 } : { x: b.x + b.w * 0.15, y: b.y, w: b.w * 0.7, h: b.h }, r.fork(names[i]));
     });
   });
-  return c.svg({ bg: PAPER, round: 16 });
+  return c.svg({ bg: pal(dark).paper, round: 16 });
 }
 
 // Imagen para compartir el link de invitación (1200 × 630).
@@ -232,11 +240,14 @@ export function og({ title = 'Pantry', subtitle = 'La lista de compras de la cas
   const r = c.r;
   c.shape(ellipsePts(w * 0.74, h * 0.52, w * 0.3, h * 0.44, 34, 0.1), { fill: mix(OAT, PAPER, 0.35), ink: false, wobbleScale: 2 });
   const names = items || ['oat milk', 'bananas', 'coffee beans', 'dish soap', 'bread', 'tomatoes'];
-  const boxes = scatter(r, names.length, { x: w * 0.5, y: h * 0.1, w: w * 0.46, h: h * 0.8, min: 150, max: 210, pad: 10 });
-  boxes.forEach((b, i) => {
-    const kind = kindOf(names[i]);
+  // Grilla de 3 × 2 con variación: en un formato fijo, ordena mejor que repartir al azar.
+  const cols = 3, gx = w * 0.5, gy = h * 0.1, cw = (w * 0.46) / cols, ch = (h * 0.8) / 2;
+  names.slice(0, 6).forEach((name, i) => {
+    const s2 = Math.min(cw, ch) * r.float(0.72, 0.86);
+    const b = { x: gx + (i % cols) * cw + (cw - s2) / 2 + r.float(-12, 12), y: gy + Math.floor(i / cols) * ch + (ch - s2) / 2 + r.float(-12, 12), w: s2, h: s2 };
+    const kind = kindOf(name);
     c.group(`rotate(${r.float(-12, 12).toFixed(1)} ${(b.x + b.w / 2).toFixed(1)} ${(b.y + b.h / 2).toFixed(1)})`, () =>
-      MOTIFS[kind](c, kind === 'banana' || kind === 'loaf' ? { x: b.x, y: b.y + b.h * 0.25, w: b.w, h: b.h * 0.7 } : { x: b.x + b.w * 0.15, y: b.y, w: b.w * 0.7, h: b.h }, r.fork(names[i])));
+      MOTIFS[kind](c, kind === 'banana' || kind === 'loaf' ? { x: b.x, y: b.y + b.h * 0.25, w: b.w, h: b.h * 0.7 } : { x: b.x + b.w * 0.15, y: b.y, w: b.w * 0.7, h: b.h }, r.fork(name)));
   });
   c.text(title, 80, 300, { size: 96, weight: 800 });
   c.text(subtitle, 80, 370, { size: 34, weight: 400, color: '#5b6b60' });
@@ -244,8 +255,8 @@ export function og({ title = 'Pantry', subtitle = 'La lista de compras de la cas
 }
 
 // 404: un frasco caído, con la tapa hacia la derecha y los granos saliendo de la boca.
-export function notFound({ style = 'riso', w = 320, h = 220 } = {}) {
-  const c = canvas({ w, h, size: 220, style, palette, seed: 'notfound', inkWidth: 2.2, grainScale: w, wobbleScale: 0.55 });
+export function notFound({ style = 'riso', w = 320, h = 220, dark = false } = {}) {
+  const c = canvas({ w, h, size: 220, style, palette: pal(dark), seed: 'notfound', inkWidth: 2.2, grainScale: w, wobbleScale: 0.55 });
   const r = c.r;
   const floor = h * 0.8;
   c.stroke([[w * 0.05, floor], [w * 0.95, floor]], { width: 1.1 });
@@ -262,18 +273,18 @@ export function notFound({ style = 'riso', w = 320, h = 220 } = {}) {
 }
 
 // Lo que muestra la hoja de muestra (specimen.mjs): cada pieza con varias semillas.
-export function specimen(style = 'riso') {
+export function specimen(style = 'riso', { dark = false } = {}) {
   const products = ['Oat milk', 'Bananas', 'Coffee beans', 'Dish soap', 'Bread', 'Tomatoes', 'Rice', 'Tuna', 'Lentils', 'Yerba'];
   const people = ['Ana', 'Mateo', 'Lu', 'Tomi', 'Sofi', 'Rulo', 'Martín', 'Cami'];
   return [
-    { group: 'Productos de la lista', items: products.map((p) => ({ label: p, svg: itemGlyph(p, { size: 72, style }) })) },
-    { group: 'Convivientes de una casa', items: people.map((p) => ({ label: p, svg: avatar(p, { size: 72, style, among: people }) })) },
+    { group: 'Productos de la lista', items: products.map((p) => ({ label: p, svg: itemGlyph(p, { size: 72, style, dark }) })) },
+    { group: 'Convivientes de una casa', items: people.map((p) => ({ label: p, svg: avatar(p, { size: 72, style, among: people, dark }) })) },
     { group: 'Estados', items: [
-      { label: 'Lista vacía', svg: emptyState({ mood: 'empty', style }) },
-      { label: 'Todo comprado', svg: emptyState({ mood: 'done', style }) },
-      { label: '404', svg: notFound({ style }) },
+      { label: 'Lista vacía', svg: emptyState({ mood: 'empty', style, dark }) },
+      { label: 'Todo comprado', svg: emptyState({ mood: 'done', style, dark }) },
+      { label: '404', svg: notFound({ style, dark }) },
     ] },
-    { group: 'Portadas', items: ['Semana del 6', 'Asado del sábado', 'Mudanza'].map((t) => ({ label: t, svg: cover(t, { style }) })) },
+    { group: 'Portadas', items: ['Semana del 6', 'Asado del sábado', 'Mudanza'].map((t) => ({ label: t, svg: cover(t, { style, dark }) })) },
     { group: 'Imagen para compartir', items: [{ label: 'Invitación', svg: og({ style }) }] },
   ];
 }

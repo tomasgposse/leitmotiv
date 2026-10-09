@@ -3,6 +3,7 @@
 // generador, en uno o varios estilos, lo captura y revisa que el sistema se porte bien.
 //
 // Uso: node specimen.mjs <generador.mjs> [--styles riso,line,blocks] [--out .motif] [--dark]
+// --dark pide specimen(style, { dark: true }) y muestra la hoja sobre fondo oscuro.
 // Escribe <out>/specimen.html, <out>/specimen.png y <out>/checks.json.
 
 import fs from 'node:fs';
@@ -25,10 +26,11 @@ if (typeof art.specimen !== 'function') { console.error(`${file} no exporta spec
 const checks = [];
 const check = (ok, what, detail = '') => checks.push({ ok, what, detail });
 
-const sheets = styles.map((style) => ({ style, groups: art.specimen(style) }));
+const dark = args.includes('--dark');
+const sheets = styles.map((style) => ({ style, groups: art.specimen(style, { dark }) }));
 
 // La misma semilla tiene que dar siempre el mismo dibujo.
-const again = JSON.stringify(art.specimen(styles[0]));
+const again = JSON.stringify(art.specimen(styles[0], { dark }));
 check(again === JSON.stringify(sheets[0].groups), 'Determinista', 'la misma semilla da el mismo SVG');
 
 // Dentro de cada grupo, semillas distintas tienen que dar dibujos distintos.
@@ -99,7 +101,7 @@ fs.writeFileSync(path.join(out, 'specimen.html'), html);
 fs.writeFileSync(path.join(out, 'checks.json'), JSON.stringify(checks, null, 2));
 
 // --- Captura ---
-const page = await open({ width: 1280, height: 900, scale: 1, dark: args.includes('--dark') });
+const page = await open({ width: 1280, height: 900, scale: 1, dark });
 try {
   await page.goto(pathToFileURL(path.join(out, 'specimen.html')).href);
   await page.screenshot(path.join(out, 'specimen.png'));

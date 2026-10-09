@@ -1,0 +1,23 @@
+{
+  "skill_name": "motif",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "mi app de gastos compartidos se ve muy fría, los estados vacíos son solo texto y los avatares son iniciales. dale vida",
+      "expected_output": "Runs survey.mjs and reads the product; names the product's world (not the UI) with 8-12 nouns; proposes three languages different in kind, each with idea, why it belongs, grammar, motifs, what each slot shows and risks, and shows a rendered specimen of each; waits for the person to choose; builds engine + <product>-art.mjs with the project's exact tokens; avatars use `among` so housemates never look alike; runs specimen.mjs and iterates visually; wires empty states and avatars keeping text and buttons; screenshots the real app in light and dark; leaves ILLUSTRATION.md in Spanish.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "We need an OG image for every project page and a cover for each project in the dashboard. Next.js app.",
+      "expected_output": "Seeds covers from the project's id and its own contents, renders on the server, exports or generates PNG for OG (social networks don't accept SVG), keeps ids namespaced, and documents the language in ILLUSTRATION.md.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "add some cute illustrations to our banking dashboard",
+      "expected_output": "Reads the brand and pushes back on 'cute' if the brand forbids it (faces on a finance product): proposes calmer languages (line, few colors, objects of the product's world like envelopes, coins, receipts) and says why; or says illustration should be limited to a few slots (empty states, onboarding) and not the data screens.",
+      "files": []
+    }
+  ]
+}

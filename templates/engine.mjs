@@ -128,6 +128,9 @@ export function canvas({ w, h, size = Math.min(w, h), style = 'riso', palette, s
   const r = rng(seed);
   const id = `m${(hash(`${seed}|${w}x${h}|${typeof style === 'string' ? style : 'x'}`) % 1e9).toString(36)}`;
   const fills = [], inks = [], shadows = [], tops = [];
+  // Multiplicar (las tintas que se pisan se oscurecen, como en riso) solo sobre papel claro:
+  // sobre un fondo oscuro ensucia los colores. Una paleta con dark: true lo apaga.
+  const blend = S.blend && !palette.dark;
   const inkW = inkWidth != null && S.ink ? inkWidth * (S.ink / 0.022) : S.ink * size;
   const amp = S.wobble * size * wobbleScale;
 
@@ -191,7 +194,7 @@ export function canvas({ w, h, size = Math.min(w, h), style = 'riso', palette, s
         + `<g${round ? ` clip-path="url(#${id}c)"` : ''}>`
         + (bg ? `<rect width="${w}" height="${h}" fill="${bg}"/>` : '')
         + (shadows.length ? `<g>${shadows.join('')}</g>` : '')
-        + `<g${S.blend ? ' style="mix-blend-mode:multiply"' : ''}${S.grain ? ` filter="url(#${id}g)"` : ''} opacity="${S.blend ? 0.94 : 1}">${fills.join('')}</g>`
+        + `<g${blend ? ' style="mix-blend-mode:multiply"' : ''}${S.grain ? ` filter="url(#${id}g)"` : ''} opacity="${blend ? 0.94 : 1}">${fills.join('')}</g>`
         + `<g transform="translate(${o} ${o2})">${inks.join('')}</g>`
         + `<g>${tops.join('')}</g>`
         + `</g></svg>`;
